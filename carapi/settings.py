@@ -25,6 +25,9 @@ SECRET_KEY = 'kmgaov8f&imkk-13ago1sj#q0)@93hv7nr6_jx@ggd-g57$r4&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Set to True to delete messages that have been sent to the Pi
+DELETE_FETCHED_MESSAGES = False
+
 ALLOWED_HOSTS = []
 
 
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api.apps.ApiConfig'
 ]
 
 MIDDLEWARE_CLASSES = [
