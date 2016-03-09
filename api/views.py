@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import Message
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+
 
 import json
 # Create your views here.
@@ -18,9 +20,13 @@ def create_response():
     return JsonResponse(json_objects, safe=False)
 
 
+"""Make an exception from CSRF, since the PI will make POST
+requests and the authenticity of the requests will be ensured other ways"""
+@csrf_exempt
 def status(request):
     return create_response()
 
 
+@csrf_exempt
 def error(request):
     return create_response()
