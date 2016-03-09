@@ -16,6 +16,9 @@ def create_response():
     if settings.DELETE_FETCHED_MESSAGES:
         messages.delete()
 
+    if len(json_objects) == 0:
+        return HttpResponse()
+
     # set safe to false to allow list as root
     return JsonResponse(json_objects, safe=False)
 
