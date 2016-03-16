@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+body {
+    background-color: #9cd4d8;
+}
+
+#wrapper {
+    width: 750px;
+}
+
+#box {
+    background-color: #ffffff;
+    padding: 5px;
+}
+
+#info {
+    width: 80%;
+}
+
+#value {
+    float:right;
+    
+}
+
+h1 {
+    font-family: "Helvetica Neue";
+    font-weight: normal;
+}
