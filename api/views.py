@@ -27,6 +27,14 @@ def create_response():
 requests and the authenticity of the requests will be ensured other ways"""
 @csrf_exempt
 def status(request):
+    # Decode the POST body, so it can be read by json.load
+    json_string = request.body.decode("utf-8")
+    # Parse JSON
+    data_from_pi = json.loads(json_string)
+    # Print the received data
+    if settings.DEBUG:
+        print(data_from_pi)
+    # TODO: Save these data so they can be accessed by the user later
     return create_response()
 
 
