@@ -1,11 +1,16 @@
 from django.db import models
 import json
+import datetime
+import time
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
 
+
 class Message(models.Model):
     def convert_boolean(self, str):
+        str = str.lower()
         if str == "true":
             return True
         elif str == "false":
@@ -16,18 +21,23 @@ class Message(models.Model):
     def convert_float(self, str):
         return float(str)
 
+    def convert_time(self, str):
+        return str
+
     def __str__(self):
         return "Set " + self.type + " to " + self.value
 
 
     MESSAGE_CONVERTERS = {
         "AC_enabled": convert_boolean,
-        "AC_temperature": convert_float
+        "AC_temperature": convert_float,
+        "AC_timer": convert_time
     }
 
     MESSAGE_TYPE = (
                 ('AC_enabled', "Set air condition status"),
-                ('AC_temperature', "Set air condition temperature")
+                ('AC_temperature', "Set air condition temperature"),
+                ('AC_timer', "Set activation time for the AC")
 
     )
 
