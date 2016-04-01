@@ -6,23 +6,30 @@ body {
 
 #wrapper {
     width: 750px;
+    margin: 0 auto;
 }
 
 #box {
     background-color: #ffffff;
-    padding: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
 }
 
 #info {
-    width: 80%;
+    float:left;
+    width: 70%;
+    padding-left: 20px;
 }
 
 #value {
-    float:right;
-    
+	text-align: right;
+	margin-left: 70%;
+    width: 27%;
+    padding-right: 20px;
 }
 
 h1 {
     font-family: "Helvetica Neue";
     font-weight: normal;
+    line-height: 100%;
 }
