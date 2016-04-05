@@ -49,3 +49,17 @@ class Message(models.Model):
 
 
 
+class FloatData(models.Model):
+
+    key = models.CharField(max_length=50, primary_key=True)
+    value = models.FloatField(editable=True)
+
+class BooleanData(models.Model):
+
+    key = models.CharField(max_length=50, primary_key=True)
+    value = models.BooleanField(editable=True)
+
+class StringData(models.Model):
+
+    key = models.CharField(max_length=50, primary_key=True)
+    value = models.CharField(max_length=200, editable=True)
