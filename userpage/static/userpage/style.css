@@ -2,10 +2,13 @@
 
 body {
     background-color: #9cd4d8;
+    line-height: 100%;
+    font-size: 1.2em;
+    font-family: "Helvetica Neue",Verdana,sans-serif;
 }
 
 #wrapper {
-    width: 750px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
@@ -13,6 +16,7 @@ body {
     background-color: #ffffff;
     margin-bottom: 10px;
     overflow: hidden;
+    padding: 0.5em;
 }
 
 #info {
@@ -29,7 +33,5 @@ body {
 }
 
 h1 {
-    font-family: "Helvetica Neue";
     font-weight: normal;
-    line-height: 100%;
 }

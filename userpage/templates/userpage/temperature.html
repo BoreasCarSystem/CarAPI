@@ -1,22 +1,14 @@
-{% load staticfiles %}
+{% extends "userpage/base.html" %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'userpage/style.css' %}" />
+{% block title %}Set temperature{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Set temperature</title>
-</head>
-
-<body>
-    <div id="wrapper">
+{% block content %}
         <div id="box">
             <div id="info">
-                <h1>Current temperature: </h1>
+                Current temperature:
             </div>
             <div id="value">
-                <h1>21 C</h1>
+                21 C
             </div>
         </div>
-    </div>
-</body>
-</html>
+{% endblock %}
