@@ -5,8 +5,13 @@ from django.template import loader
 
 
 def status(request):
-    return HttpResponse("OK")
+    sensor_values = [
+        {"name": "Current temperature:", "value": "21 °C", "image": "userpage/icons/Temperature-96.png"},
+        {"name": "Battery Level:", "value": "full"},
+    ]
+    context = {"sensors": sensor_values}
+    return render(request=request, template_name="userpage/status.html", context=context)
+
 
 def temperature(request):
-
     return render(request=request, template_name="userpage/temperature.html")

@@ -1,0 +1,20 @@
+{% extends "userpage/base.html" %}
+{% load staticfiles %}
+
+{% block title %}Car status{% endblock %}
+
+{% block content %}
+    {% for sensor in sensors %}
+        <div class="box">
+            <div class="info">
+                {% if sensor.image %}
+                <img src="{% static sensor.image %}" alt="{{ sensor.name }}"/>
+                {% endif %}
+                {{ sensor.name }}
+            </div>
+            <div class="value">
+                {{ sensor.value }}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
