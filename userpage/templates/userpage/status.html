@@ -3,13 +3,21 @@
 
 {% block title %}Car status{% endblock %}
 
+{% block head %}
+<meta http-equiv="refresh" content="20" />
+{% endblock %}
+
 {% block content %}
     {% for sensor in sensors %}
         <div class="box">
+            {% if sensor.image %}
+                <div>
+                    <img src="{% static sensor.image %}" alt="{{ sensor.name }}"/>
+                </div>
+            {% else %}
+                <div style="width: 40px; float: left">&nbsp;</div>
+            {% endif %}
             <div class="info">
-                {% if sensor.image %}
-                <img src="{% static sensor.image %}" alt="{{ sensor.name }}"/>
-                {% endif %}
                 {{ sensor.name }}
             </div>
             <div class="value">

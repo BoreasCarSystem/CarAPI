@@ -21,20 +21,21 @@ body {
 
 .info {
     float:left;
-    width: 70%;
-    padding-left: 20px;
+    padding-left: 0.5em;
     vertical-align: middle;
+    line-height: 40px;
 }
 
-.info img {
+.box div img {
     width: 40px;
+    height: 40px;
+    float:left;
 }
 
 .value {
-	text-align: right;
-	margin-left: 70%;
-    width: 27%;
-    padding-right: 20px;
+	float:right;
+    padding-right: 0.5em;
+    line-height: 40px;
 }
 
 h1 {
