@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.template import loader
 
 from api.models import FloatData, BooleanData, StringData, Message
@@ -42,26 +42,30 @@ def status(request):
 
 
 def temperature(request):
+    if request.method == "POST":
+        activate_temperature(request)
+
     return render(request=request, template_name="userpage/temperature.html")
 
 
 def activate_temperature(request):
-    if request.method == "POST":
-        temp = url_parser(request)
+    post = dict(request.POST)
 
-        temp_message = Message()
-        temp_message.type = "AC_temperature"
-        temp_message.value = temp
-        temp_message.save()
+    if "temperature" in post:
+        create_temperature_message(post["temperature"][0])
 
-        return HttpResponse(status=200, content="hei")
+    if "time" in post:
+        create_time_message(post["time"][0])
 
 
-def url_parser(request):
-    data = dict(request.POST)
-    temp = None
+def create_temperature_message(temperature):
+    message = Message()
+    message.type = "AC_temperature"
+    message.value = temperature
+    message.save()
 
-    if "temperature" in data:
-        temp = data["temperature"][0]
-
-    return temp
+def create_time_message(time):
+    message = Message()
+    message.type = "AC_timer"
+    message.value = time
+    message.save()
