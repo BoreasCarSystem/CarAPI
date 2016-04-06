@@ -9,7 +9,7 @@ def status(request):
         {"name": "Current temperature:", "value": "21 °C", "image": "userpage/icons/Temperature-96.png"},
         {"name": "Battery Level:", "value": "full"},
     ]
-    context = {"sensors": sensor_values}
+    context = {"sensors": sensor_values, "warning": "Insert warning here, or remove it to have no warning."}
     return render(request=request, template_name="userpage/status.html", context=context)
 
 
