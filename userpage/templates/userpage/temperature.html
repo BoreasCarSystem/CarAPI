@@ -11,4 +11,17 @@
                 21 °C
             </div>
         </div>
+
+
+
+    <form action="/userpage/activatetemperature/" method="post">
+    {% csrf_token %}
+    <label for="your_name">Temperature: </label>
+    <input id="temperature" type="text" name="temperature" value="{{ current_name }}">
+    <input type="submit" value="OK">
+    </form>
+
+
+
+
 {% endblock %}
