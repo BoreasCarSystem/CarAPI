@@ -5,8 +5,8 @@ from userpage import views
 
 urlpatterns = [
 
-    url(r'^status/$', views.status),
-    url(r'^temperature/$', views.temperature),
+    url(r'^status/$', views.status, name="status"),
+    url(r'^temperature/$', views.temperature, name="temperature"),
 
 
 ]

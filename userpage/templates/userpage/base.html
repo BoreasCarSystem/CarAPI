@@ -9,10 +9,14 @@
     {% block head %}{% endblock %}
 </head>
 
-<body>
+<body id="{% block id %}generic{% endblock %}">
     <div id="wrapper">
         {% block content %}
         {% endblock %}
     </div>
+    <nav>
+        <a href="{% url "status" %}" class="nav-status">Car status</a>{% comment %}
+{% endcomment %}<a href="{% url "temperature" %}" class="nav-temperature">Car A/C</a>
+    </nav>
 </body>
 </html>
