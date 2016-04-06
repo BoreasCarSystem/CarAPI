@@ -5,11 +5,13 @@ body {
     line-height: 100%;
     font-size: 1.2em;
     font-family: "Helvetica Neue",Verdana,sans-serif;
+    margin: 0;
 }
 
 #wrapper {
     max-width: 500px;
-    margin: 0 auto;
+    margin: 0 auto 60px auto;
+    padding: 0.5em;
 }
 
 .box {
@@ -40,4 +42,40 @@ body {
 
 h1 {
     font-weight: normal;
+}
+
+nav {
+    position: fixed;
+    bottom: 0;
+    background-color: #74bcbf;
+    border-top: solid 1px black;
+    height: 60px;
+    width: 100%;
+}
+
+nav a:link,
+nav a:visited
+{
+    color: white;
+    text-shadow: 1px 1px 2px #325d5f;
+    display: inline-block;
+    box-sizing: border-box;
+    height: 100%;
+    width: 50%;
+    text-align: center;
+    line-height: 60px;
+    text-decoration: none;
+}
+
+nav a.nav-status
+{
+    border-right: solid 1px black;
+}
+
+#status .nav-status,
+#temperature .nav-temperature
+{
+    /* Active link */
+    font-weight: bold;
+    background-color: #57a3a5;
 }
