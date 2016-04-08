@@ -35,13 +35,11 @@ def getDataValue(pk, objects, suffix=None, replace_true_with=None, replace_false
 
 def status(request):
 
-
     battery_level = getDataValue("battery_level", FloatData.objects, "%")
     fuel_level = getDataValue("fuel_level", FloatData.objects, "%")
     temperature = getDataValue("temperature", FloatData.objects, "°C")
     washerfluid_level = getDataValue("washerfluid_level", FloatData.objects, "%")
     ac_enabled = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
-
 
     sensor_values = [
         {"name": "Current temperature:", "value": temperature, "image": "userpage/icons/Temperature-96.png"},
@@ -56,12 +54,12 @@ def status(request):
 
 
 def temperature(request):
-	context = dict()
+    context = dict()
     if request.method == "POST":
-    	try:
-        	activate_temperature(request)
+        try:
+            activate_temperature(request)
         except ValueError as e:
-        	context["warning"] = e.args[0] 
+            context["warning"] = e.args[0]
 
     return render(request=request, template_name="userpage/temperature.html", context=context)
 
@@ -70,21 +68,20 @@ def activate_temperature(request) :
     post = dict(request.POST)
 
     if "temperature" in post:
-    	try:
-    		temp = (float)trim(post["temperature"][0])
-    		create_temperature_message(temp)
-    	except:
-    		raise ValueError("Temperature must be a number", "temperature")
+        try:
+            temp = float(post["temperature"][0].strip())
+            create_temperature_message(temp)
+        except:
+            raise ValueError("Temperature must be a number", "temperature")
 
-    		
     if "time" in post:
-    	try:
-    		time = post["time"][0]
-    		time.strptime(time, "%H:%M")
-    		create_time_messaget(time)
-    	except ValueError:
-    		raise ValueError("Time must be in the format \"HH:MM\"", "time")
-        
+        try:
+            time = post["time"][0]
+            time.strptime(time, "%H:%M")
+            create_time_message(time)
+
+        except ValueError:
+            raise ValueError("Time must be in the format \"HH:MM\"", "time")
 
 
 def create_temperature_message(temperature):
@@ -92,6 +89,7 @@ def create_temperature_message(temperature):
     message.type = "AC_temperature"
     message.value = temperature
     message.save()
+
 
 def create_time_message(time):
     message = Message()
