@@ -26,7 +26,7 @@ SECRET_KEY = 'kmgaov8f&imkk-13ago1sj#q0)@93hv7nr6_jx@ggd-g57$r4&'
 DEBUG = True
 
 # Set to True to delete messages that have been sent to the Pi
-DELETE_FETCHED_MESSAGES = False
+DELETE_FETCHED_MESSAGES = True
 
 ALLOWED_HOSTS = []
 
