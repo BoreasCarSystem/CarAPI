@@ -4,7 +4,7 @@ from django.template import loader
 
 from api.models import FloatData, BooleanData, StringData, Message
 from django.core.exceptions import ObjectDoesNotExist
-import time
+import time as tm
 
 # Create your views here.
 
@@ -77,7 +77,7 @@ def activate_temperature(request) :
     if "hours" in post and "minutes" in post:
         try:
             time = post["hours"][0]  + ":" + post["minutes"][0]
-            time.strptime(time, "%H:%M")	#Raiser valueError om regexen ikke matcher
+            tm.strptime(time, "%H:%M")	#Raiser valueError om regexen ikke matcher
             create_time_message(time)
         except ValueError:
             raise ValueError("Time must be in the format \"HH:MM\"", "time")
@@ -107,5 +107,5 @@ def create_time_message(time):
 def create_AC_enabled_message(enabled):
     message = Message()
     message.type = "AC_enabled"
-	message.value = enabled
-	message.save()
+    message.value = enabled
+    message.save()
