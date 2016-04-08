@@ -8,15 +8,27 @@ from django.core.exceptions import ObjectDoesNotExist
 
 thing = "<html><head><title>yes</title></head><body>YOU DID IT</body></html>"
 
-def getDataValue(pk, objects, suffix=""):
+
+def getDataValue(pk, objects, suffix=None, replace_true_with=None, replace_false_with=None):
     try:
         value = objects.get(pk=pk).value
+        value_string = None
+
         if isinstance(value, float):
             value = round(value, 1)
-        return str(value) + " " + suffix
+            value_string = str(value)
+        elif isinstance(value, bool):
+            if value and replace_true_with:
+                value_string = replace_true_with
+            elif not value and replace_false_with:
+                value_string = replace_false_with
+        if not value_string:
+            value_string = str(value)
+        if suffix:
+            return value_string + " " + suffix
+        return value_string
     except ObjectDoesNotExist:
         return "N/A"
-
 
 
 def status(request):
@@ -26,7 +38,7 @@ def status(request):
     fuel_level = getDataValue("fuel_level", FloatData.objects, "%")
     temperature = getDataValue("temperature", FloatData.objects, "°C")
     washerfluid_level = getDataValue("washerfluid_level", FloatData.objects, "%")
-    ac_status = getDataValue("ac_status", StringData.objects)
+    ac_enabled = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
 
 
     sensor_values = [
@@ -35,9 +47,9 @@ def status(request):
         {"name": "Fuel Level", "value": fuel_level,"image":"userpage/icons/Gas Station-96.png"},
         {"name": "Washerfluid Level", "value": washerfluid_level, "image":"userpage/icons/Water-96.png"},
         {"name": "Oil Level", "value": "OK", "image": "userpage/icons/Oil Industry-96.png"},
-        {"name": "A/C status", "value": ac_status, "image":"userpage/icons/Fan-96.png"}
+        {"name": "A/C status", "value": ac_enabled, "image":"userpage/icons/Fan-96.png"}
     ]
-    context = {"sensors": sensor_values}
+    context = {"sensors": sensor_values, "warning": "Insert warning here, or remove it to have no warning."}
     return render(request=request, template_name="userpage/status.html", context=context)
 
 
