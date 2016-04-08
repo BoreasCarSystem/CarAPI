@@ -1,15 +1,17 @@
 {% extends "userpage/base.html" %}
+{% load staticfiles %}
+{% load range %}
 
 {% block title %}Set temperature{% endblock %}
 
 {% block id %}temperature{% endblock %}
 
 {% block content %}
-        <div id="box">
-            <div id="info">
+        <div class="box">
+            <div class="info">
                 Current temperature:
             </div>
-            <div id="value">
+            <div class="value">
                 21 °C
             </div>
         </div>
@@ -18,13 +20,57 @@
 
     <form action="/userpage/temperature/" method="post">
         {% csrf_token %}
-        <label for="temperature">Temperature: </label>
-        <input id="temperature" type="text" name="temperature" value="{{ temp }}">
+        <div class="box">
+            <div>
+                <img src="{% static "userpage/icons/Temperature-96.png" %}">
+            </div>
+            <div class="info">
+                <label for="temperature">Temperature: </label>
+                <input id="temperature" type="number" name="temperature" min="10" max="30" value="20">
+            </div>
+        </div>
 
-        <br>
-        <label for="time">Time: </label>
-        <input id="time" type="text" name="time"  value="{{ time }}">
-        <input type="submit" value="OK">
+        <div class="box">
+            <div>
+                <img src="{% static "userpage/icons/Time Span-96.png" %}">
+            </div>
+            <div class="info">
+                <label for="time">Time: </label>
+
+                <select class="dropdown" type="number" name="hours"  value="00">
+                    {% for hour in 24|get_range  %}
+
+                        {% if hour < 10 %}
+                            <option value="0{{ hour }}"> 0{{ hour }} </option>
+                        {% else %}
+                            <option value="{{ hour }}"> {{ hour }} </option>
+                        {% endif %}
+
+                    {%  endfor %}
+                </select>
+
+                <select class="dropdown" type="number" name="minutes" value="00">
+                    {% for minutes in 60|get_range %}
+                        {% if minutes < 10 %}
+                            <option value="0{{ minutes }}"> 0{{ minutes }} </option>
+                        {% else %}
+                            <option value="{{ minutes }}"> {{ minutes }} </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+
+
+
+            </div>
+        </div>
+
+        <input id="AC_enabled" type="hidden" name="AC_enabled" value="{{ sensor.AC_enabled }}">
+
+        <div class="box">
+            <input type="submit" value="OK">
+        </div>
+
     </form>
 
 
