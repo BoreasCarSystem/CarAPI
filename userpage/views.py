@@ -37,7 +37,7 @@ def status(request):
         {"name": "Oil Level", "value": "OK", "image": "userpage/icons/Oil Industry-96.png"},
         {"name": "A/C status", "value": ac_status, "image":"userpage/icons/Fan-96.png"}
     ]
-    context = {"sensors": sensor_values}
+    context = {"sensors": sensor_values, "warning": "Insert warning here, or remove it to have no warning."}
     return render(request=request, template_name="userpage/status.html", context=context)
 
 

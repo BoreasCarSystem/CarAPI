@@ -10,6 +10,11 @@
 </head>
 
 <body id="{% block id %}generic{% endblock %}">
+    {% if warning %}
+    <div id="warning">
+        <span id="warning-icon">!</span> <span id="warning-content">{{ warning }}</span>
+    </div>
+    {% endif %}
     <div id="wrapper">
         {% block content %}
         {% endblock %}
