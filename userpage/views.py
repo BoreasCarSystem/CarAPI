@@ -4,6 +4,8 @@ from django.template import loader
 
 from api.models import FloatData, BooleanData, StringData, Message
 from django.core.exceptions import ObjectDoesNotExist
+import time
+
 # Create your views here.
 
 thing = "<html><head><title>yes</title></head><body>YOU DID IT</body></html>"
@@ -54,20 +56,35 @@ def status(request):
 
 
 def temperature(request):
+	context = dict()
     if request.method == "POST":
-        activate_temperature(request)
+    	try:
+        	activate_temperature(request)
+        except ValueError as e:
+        	context["warning"] = e.args[0] 
 
-    return render(request=request, template_name="userpage/temperature.html")
+    return render(request=request, template_name="userpage/temperature.html", context=context)
 
 
-def activate_temperature(request):
+def activate_temperature(request) :
     post = dict(request.POST)
 
     if "temperature" in post:
-        create_temperature_message(post["temperature"][0])
+    	try:
+    		temp = (float)trim(post["temperature"][0])
+    		create_temperature_message(temp)
+    	except:
+    		raise ValueError("Temperature must be a number", "temperature")
 
+    		
     if "time" in post:
-        create_time_message(post["time"][0])
+    	try:
+    		time = post["time"][0]
+    		time.strptime(time, "%H:%M")
+    		create_time_messaget(time)
+    	except ValueError:
+    		raise ValueError("Time must be in the format \"HH:MM\"", "time")
+        
 
 
 def create_temperature_message(temperature):
