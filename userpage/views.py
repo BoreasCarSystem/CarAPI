@@ -71,21 +71,26 @@ def activate_temperature(request) :
 
     if "temperature" in post:
     	try:
-    		temp = (float)trim(post["temperature"][0])
+    		temp = float((post["temperature"][0]).strip())
     		create_temperature_message(temp)
     	except:
     		raise ValueError("Temperature must be a number", "temperature")
 
     		
-    if "time" in post:
+    if "hours" in post and "minutes" in post:
     	try:
-    		time = post["time"][0]
-    		time.strptime(time, "%H:%M")
-    		create_time_messaget(time)
+    		time = post["hours"][0]  + ":" + post["minutes"][0]
+    		time.strptime(time, "%H:%M")	#Raiser valueError om regexen ikke matcher
+    		create_time_message(time)
     	except ValueError:
     		raise ValueError("Time must be in the format \"HH:MM\"", "time")
         
-
+    if "AC_enabled" in post:
+    	enabled = post["AC_enabled"][0]
+    	if isinstance(enabled, bool):
+    		create_AC_enabled_message(enabled)
+    	else:
+    		raise ValueError("AC_enabled is not boolean", "AC_enabled")
 
 def create_temperature_message(temperature):
     message = Message()
@@ -98,3 +103,9 @@ def create_time_message(time):
     message.type = "AC_timer"
     message.value = time
     message.save()
+
+def create_AC_enabled_message(enabled):
+	message = Message()
+	message.type = "AC_enabled"
+	message.value = enabled
+	message.save()
