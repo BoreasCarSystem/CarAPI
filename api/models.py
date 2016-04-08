@@ -62,7 +62,7 @@ class BooleanData(models.Model):
     key = models.CharField(max_length=50, primary_key=True)
     value = models.BooleanField(editable=True)
 
-     def __str__(self):
+    def __str__(self):
         return self.key + ": " + str(self.value)
 
 class StringData(models.Model):
@@ -70,5 +70,5 @@ class StringData(models.Model):
     key = models.CharField(max_length=50, primary_key=True)
     value = models.CharField(max_length=200, editable=True)
 
-     def __str__(self):
+    def __str__(self):
         return self.key + ": " + str(self.value)
