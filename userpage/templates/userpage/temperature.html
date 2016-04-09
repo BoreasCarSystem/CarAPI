@@ -7,7 +7,12 @@
 {% block id %}temperature{% endblock %}
 
 {% block content %}
+
+    <script type="text/javascript" src="{% static 'userpage/temperature.js' %}"></script>
+
+
         <div class="box">
+            <div><img src="{% static "userpage/icons/Temperature-96.png" %}"></div>
             <div class="info">
                 Current temperature:
             </div>
@@ -16,26 +21,29 @@
             </div>
         </div>
 
+        <div class="box">
+            <div><img src="{% static "userpage/icons/Fan-96.png" %}"></div>
+            <div class="info">
+                AC status:
+            </div>
+            <div class="value">
+                Off
+            </div>
+        </div>
+
 
 
     <form action="/userpage/temperature/" method="post">
         {% csrf_token %}
-        <div class="box">
-            <div>
-                <img src="{% static "userpage/icons/Temperature-96.png" %}">
-            </div>
-            <div class="info">
-                <label for="temperature">Temperature: </label>
-                <input id="temperature" type="number" name="temperature" min="10" max="30" value="20">
-            </div>
-        </div>
 
-        <div class="box">
-            <div>
-                <img src="{% static "userpage/icons/Time Span-96.png" %}">
-            </div>
-            <div class="info">
-                <label for="time">Time: </label>
+        <div id="temperature-box">
+            <div class="center" style="padding-top: 30px; padding-bottom: 30px;">Choose target temperature</div>
+            <img class="center" src="{% static 'userpage/icons/up-arrow.png' %}" onclick="upClick();" >
+            <div class="center" id="circle"> </div>
+            <img class="center" src="{% static 'userpage/icons/down-arrow.png' %}" onclick="downClick()">
+
+            <div class="center" style="padding-top: 30px; padding-bottom: 30px;>
+                <label for="time">Ready at: </label>
 
                 <select class="dropdown" type="number" name="hours"  value="00">
                     {% for hour in 24|get_range  %}
@@ -58,22 +66,41 @@
                         {% endif %}
                     {% endfor %}
                 </select>
-
-
-
-
             </div>
-        </div>
 
-        <input id="AC_enabled" type="hidden" name="AC_enabled" value="True">
+            <input id="AC_enabled" type="hidden" name="AC_enabled" value="True">
+            <input id="temp" type="hidden" name="temperature" value="">
 
-        <div class="box">
-            <input type="submit" value="OK">
+            <div class="center">
+                <input type="submit" value="Activate" onclick="setValues();">
+            </div>
         </div>
 
     </form>
 
 
+    <script>
+        var temp = 20;
+        document.getElementById("circle").innerHTML = temp.toString();
 
+        function upClick(){
+            if(temp < 30){
+                temp = temp + 1;
+                document.getElementById("circle").innerHTML = temp.toString();
+            }
+        }
+
+        function downClick(){
+            if(temp > 10){
+                temp = temp - 1;
+                document.getElementById("circle").innerHTML = temp.toString();
+            }
+        }
+
+        function setValues(){
+            document.getElementById("temp").value = temp.toString();
+        }
+
+    </script>
 
 {% endblock %}
