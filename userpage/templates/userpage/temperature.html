@@ -38,14 +38,15 @@
 
         <div id="temperature-box">
             <div class="center" style="padding-top: 30px; padding-bottom: 30px;">Choose target temperature</div>
-            <img class="center" src="{% static 'userpage/icons/up-arrow.png' %}" onclick="upClick();" >
+            <img class="center" src="{% static 'userpage/icons/up-arrow.svg' %}" onclick="upClick();" >
             <div class="center" id="circle"> </div>
-            <img class="center" src="{% static 'userpage/icons/down-arrow.png' %}" onclick="downClick()">
+            <img class="center" src="{% static 'userpage/icons/down-arrow.svg' %}" onclick="downClick()">
 
             <div class="center" style="padding-top: 30px; padding-bottom: 30px;>
-                <label for="time">Ready at: </label>
 
-                <select class="dropdown" type="number" name="hours"  value="00">
+                <label for="hours"> Ready at: </label>
+
+                <select class="dropdown" type="number" name="hours" id="hours">
                     {% for hour in 24|get_range  %}
 
                         {% if hour < 10 %}
@@ -57,7 +58,7 @@
                     {%  endfor %}
                 </select>
 
-                <select class="dropdown" type="number" name="minutes" value="00">
+                <select class="dropdown" type="number" name="minutes" id="minutes">
                     {% for minutes in 60|get_range %}
                         {% if minutes < 10 %}
                             <option value="0{{ minutes }}"> 0{{ minutes }} </option>
@@ -81,6 +82,17 @@
 
     <script>
         var temp = 20;
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes() + 15;
+
+        if(minutes > 60){
+            hours = (hours + 1) % 24;
+            minutes = minutes % 60
+        }
+
+        document.getElementById("hours").value = hours;
+        document.getElementById("minutes").value = minutes;
         document.getElementById("circle").innerHTML = temp.toString();
 
         function upClick(){
