@@ -8,8 +8,6 @@ import time as tm
 
 # Create your views here.
 
-thing = "<html><head><title>yes</title></head><body>YOU DID IT</body></html>"
-
 
 def getDataValue(pk, objects, suffix=None, replace_true_with=None, replace_false_with=None):
     try:
@@ -67,6 +65,8 @@ def temperature(request):
 def activate_temperature(request) :
     post = dict(request.POST)
 
+    print(post["temperature"])
+
     if "temperature" in post:
         try:
             temp = float((post["temperature"][0]).strip())
@@ -84,7 +84,7 @@ def activate_temperature(request) :
         
     if "AC_enabled" in post:
         enabled = post["AC_enabled"][0]
-        if isinstance(enabled, bool):
+        if enabled == "True":
             create_AC_enabled_message(enabled)
         else:
             raise ValueError("AC_enabled is not boolean", "AC_enabled")
