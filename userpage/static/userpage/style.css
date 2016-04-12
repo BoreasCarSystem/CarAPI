@@ -137,6 +137,7 @@ select[type=number]{
     width: 60px;
     height: 40px;
     text-align: center;
+    align: center;
     border-radius: 3px;
     border: none;
     -webkit-appearance: none;

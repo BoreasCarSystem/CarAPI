@@ -50,9 +50,9 @@
                     {% for hour in 24|get_range  %}
 
                         {% if hour < 10 %}
-                            <option value="0{{ hour }}"> 0{{ hour }} </option>
+                            <option id="hour-{{ hour }}" value="0{{ hour }}"> 0{{ hour }} </option>
                         {% else %}
-                            <option value="{{ hour }}"> {{ hour }} </option>
+                            <option id="hour-{{ hour }}" value="{{ hour }}"> {{ hour }} </option>
                         {% endif %}
 
                     {%  endfor %}
@@ -61,9 +61,9 @@
                 <select class="dropdown" type="number" name="minutes" id="minutes">
                     {% for minutes in 60|get_range %}
                         {% if minutes < 10 %}
-                            <option value="0{{ minutes }}"> 0{{ minutes }} </option>
+                            <option id="minute-{{ minutes }}" value="0{{ minutes }}"> 0{{ minutes }} </option>
                         {% else %}
-                            <option value="{{ minutes }}"> {{ minutes }} </option>
+                            <option id="minute-{{ minutes }}" value="{{ minutes }}"> {{ minutes }} </option>
                         {% endif %}
                     {% endfor %}
                 </select>
@@ -91,8 +91,8 @@
             minutes = minutes % 60
         }
 
-        document.getElementById("hours").value = hours;
-        document.getElementById("minutes").value = minutes;
+        document.getElementById("hour-" + hours).selected = true;
+        document.getElementById("minute-" + minutes).selected = true;
         document.getElementById("circle").innerHTML = temp.toString();
 
         function upClick(){
