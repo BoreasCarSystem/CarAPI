@@ -59,6 +59,9 @@ def temperature(request):
         except ValueError as e:
             context["warning"] = e.args[0]
 
+    context["AC_temperature"] = getDataValue("temperature", FloatData.objects, "°C")
+    context["AC_enabled"] = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
+
     return render(request=request, template_name="userpage/temperature.html", context=context)
 
 
