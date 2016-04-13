@@ -8,7 +8,7 @@
 
 {% block content %}
 
-    <script type="text/javascript" src="{% static 'userpage/temperature.js' %}"></script>
+
 
 
         <div class="box">
@@ -37,12 +37,12 @@
         {% csrf_token %}
 
         <div id="temperature-box">
-            <div class="center" style="padding-top: 30px; padding-bottom: 30px;">Choose target temperature</div>
-            <img class="center" src="{% static 'userpage/icons/up-arrow.svg' %}" onclick="upClick();" >
+            <div class="center" >Choose target temperature</div>
+            <div id="touchup"> <img src="{% static 'userpage/icons/up-arrow.svg' %}" onclick="upClick();" onContextMenu="return false"> </div>
             <div class="center" id="circle"> </div>
-            <img class="center" src="{% static 'userpage/icons/down-arrow.svg' %}" onclick="downClick()">
+            <div id="touchdown"> <img src="{% static 'userpage/icons/down-arrow.svg' %}" onclick="downClick()" onContextMenu="return false"></div>
 
-            <div class="center" style="padding-top: 30px; padding-bottom: 30px;>
+            <div class="center" style="padding-top: 30px; padding-bottom: 30px;">
 
                 <label for="hours"> Ready at: </label>
 
@@ -73,7 +73,7 @@
             <input id="temp" type="hidden" name="temperature" value="">
 
             <div class="center">
-                <input type="submit" value="Activate" onclick="setValues();">
+                <input id="button" type="submit" value="Activate" onclick="setValues();">
             </div>
         </div>
 
@@ -85,15 +85,34 @@
         var now = new Date();
         var hours = now.getHours();
         var minutes = now.getMinutes() + 15;
+        var ac_enabled = "{{ AC_enabled }}";
+        var up = document.getElementById("touchup");
+        var down = document.getElementById("touchdown");
+        var timer;
+
+        up.addEventListener("touchstart", touchUpClick, false);
+        down.addEventListener("touchstart", touchDownClick, false);
+
 
         if(minutes > 60){
             hours = (hours + 1) % 24;
-            minutes = minutes % 60
+            minutes = minutes % 60;
         }
 
         document.getElementById("hour-" + hours).selected = true;
         document.getElementById("minute-" + minutes).selected = true;
         document.getElementById("circle").innerHTML = temp.toString();
+
+
+        function touchUpClick(event){
+            event.preventDefault()
+            upClick();
+        }
+
+        function touchDownClick(event){
+            event.preventDefault()
+            downClick()
+        }
 
         function upClick(){
             if(temp < 30){
@@ -111,6 +130,20 @@
 
         function setValues(){
             document.getElementById("temp").value = temp.toString();
+        }
+
+        function deactivate(){
+            document.getElementById("AC_enabled").value = "False";
+        }
+
+        function setup(){
+            if(ac_enabled == "Off"){
+                document.getElementById("button").value = "Activate";
+                document.getElementById("button").onclick = setValues();
+            } else if(ac_enabled == "On"){
+                document.getElementById("button").value = "Deactivate";
+                document.getElementById("button").onclick = deactivate();
+            }
         }
 
     </script>
