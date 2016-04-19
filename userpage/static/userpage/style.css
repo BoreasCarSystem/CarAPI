@@ -163,6 +163,7 @@ input[type=checkbox]{
 }
 
 select[type=number]{
+    font-size: 0.8em;
     background: #FFFFFF;
     width: 60px;
     height: 40px;
