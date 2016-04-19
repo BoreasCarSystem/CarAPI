@@ -38,35 +38,51 @@
 
         <div id="temperature-box">
             <div class="center" >Choose target temperature</div>
-            <div id="touchup"> <img src="{% static 'userpage/icons/up-arrow.svg' %}" onclick="upClick();" onContextMenu="return false"> </div>
+            <div id="touchup">
+                <div id="up-button" style="background-image: url({% static 'userpage/icons/up-arrow.svg' %});" onclick="upClick()">
+                </div>
+            </div>
             <div class="center" id="circle"> </div>
-            <div id="touchdown"> <img src="{% static 'userpage/icons/down-arrow.svg' %}" onclick="downClick()" onContextMenu="return false"></div>
+            <div id="touchdown">
+                <div id="down-button" style="background-image: url({% static 'userpage/icons/down-arrow.svg' %})" onclick="downClick()">
+                </div>
+            </div>
+
+
 
             <div class="center" style="padding-top: 30px; padding-bottom: 30px;">
 
-                <label for="hours"> Ready at: </label>
+                <input type="checkbox" class="inliner" name="time" onclick="CheckboxClick(this)" checked="true">
 
-                <select class="dropdown" type="number" name="hours" id="hours">
-                    {% for hour in 24|get_range  %}
+                <div id="now-wrapper" class="inliner wrapper verticaler">
+                    Ready now
+                </div>
 
-                        {% if hour < 10 %}
-                            <option id="hour-{{ hour }}" value="0{{ hour }}"> 0{{ hour }} </option>
-                        {% else %}
-                            <option id="hour-{{ hour }}" value="{{ hour }}"> {{ hour }} </option>
-                        {% endif %}
+                <div id="later-wrapper" class="inliner wrapper verticaler">
+                    Ready at:
 
-                    {%  endfor %}
-                </select>
+                    <select class="dropdown verticaler" type="number" name="hours" id="hours">
+                        {% for hour in 24|get_range  %}
 
-                <select class="dropdown" type="number" name="minutes" id="minutes">
-                    {% for minutes in 60|get_range %}
-                        {% if minutes < 10 %}
-                            <option id="minute-{{ minutes }}" value="0{{ minutes }}"> 0{{ minutes }} </option>
-                        {% else %}
-                            <option id="minute-{{ minutes }}" value="{{ minutes }}"> {{ minutes }} </option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
+                            {% if hour < 10 %}
+                                <option id="hour-{{ hour }}" value="0{{ hour }}"> 0{{ hour }} </option>
+                            {% else %}
+                                <option id="hour-{{ hour }}" value="{{ hour }}"> {{ hour }} </option>
+                            {% endif %}
+
+                        {%  endfor %}
+                    </select>
+
+                    <select class="dropdown verticaler" type="number" name="minutes" id="minutes">
+                        {% for minutes in 60|get_range %}
+                            {% if minutes < 10 %}
+                                <option id="minute-{{ minutes }}" value="0{{ minutes }}"> 0{{ minutes }} </option>
+                            {% else %}
+                                <option id="minute-{{ minutes }}" value="{{ minutes }}"> {{ minutes }} </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
             <input id="AC_enabled" type="hidden" name="AC_enabled" value="True">
@@ -89,6 +105,10 @@
         var up = document.getElementById("touchup");
         var down = document.getElementById("touchdown");
         var timer;
+        var nowWrapper = document.getElementById("now-wrapper");
+        var laterWrapper = document.getElementById("later-wrapper");
+
+        laterWrapper.style.display = 'none';
 
         up.addEventListener("touchstart", touchUpClick, false);
         down.addEventListener("touchstart", touchDownClick, false);
@@ -134,6 +154,19 @@
 
         function deactivate(){
             document.getElementById("AC_enabled").value = "False";
+        }
+
+        function CheckboxClick(chkbox){
+            var later = document.getElementById("later-wrapper");
+            var now = document.getElementById("now-wrapper");
+
+            if (chkbox.checked == false){
+                later.style.display = 'inline-block';
+                now.style.display = 'none';
+            } else{
+                later.style.display = 'none';
+                now.style.display = 'inline-block';
+            }
         }
 
         function setup(){
