@@ -75,13 +75,14 @@ def activate_temperature(request) :
         except:
             raise ValueError("Temperature must be a number", "temperature")
 
-    if "hours" in post and "minutes" in post:
-        try:
-            time = post["hours"][0]  + ":" + post["minutes"][0]
-            tm.strptime(time, "%H:%M")	#Raiser valueError om regexen ikke matcher
-            create_time_message(time)
-        except ValueError:
-            raise ValueError("Time must be in the format \"HH:MM\"", "time")
+    if "time" not in post:
+        if "hours" in post and "minutes" in post:
+            try:
+                time = post["hours"][0] + ":" + post["minutes"][0]
+                tm.strptime(time, "%H:%M")	#Raiser valueError om regexen ikke matcher
+                create_time_message(time)
+            except ValueError:
+                raise ValueError("Time must be in the format \"HH:MM\"", "time")
         
     if "AC_enabled" in post:
         enabled = post["AC_enabled"][0]
