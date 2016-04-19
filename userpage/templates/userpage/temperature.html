@@ -52,14 +52,14 @@
 
             <div class="center" style="padding-top: 30px; padding-bottom: 30px;">
 
-                <input type="checkbox" class="inliner" name="time" onclick="CheckboxClick(this)" checked="true">
+                <input type="checkbox" class="inliner" name="time" onclick="CheckboxClick(this)" checked>
 
                 <div id="now-wrapper" class="inliner wrapper verticaler">
                     Ready now
                 </div>
 
                 <div id="later-wrapper" class="inliner wrapper verticaler">
-                    Ready at:
+                    Ready at
 
                     <select class="dropdown verticaler" type="number" name="hours" id="hours">
                         {% for hour in 24|get_range  %}
@@ -163,9 +163,11 @@
             if (chkbox.checked == false){
                 later.style.display = 'inline-block';
                 now.style.display = 'none';
+                document.getElementById("time").value = "0";
             } else{
                 later.style.display = 'none';
                 now.style.display = 'inline-block';
+                document.getElementById("time").value = "1";
             }
         }
 
