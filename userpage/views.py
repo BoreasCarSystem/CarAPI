@@ -33,9 +33,9 @@ def getDataValue(pk, objects, suffix=None, replace_true_with=None, replace_false
 
 def status(request):
 
-    battery_level = getDataValue("battery_level", FloatData.objects, "%")
-    fuel_level = getDataValue("fuel_level", FloatData.objects, "%")
-    temperature = getDataValue("temperature", FloatData.objects, "°C")
+    battery_level = "97.4%" or getDataValue("battery_level", FloatData.objects, "%")
+    fuel_level = "63.2%" or getDataValue("fuel_level", FloatData.objects, "%")
+    temperature = "{t} °C".format(t=-2.0) or getDataValue("temperature", FloatData.objects, "°C")
     washerfluid_level = getDataValue("washerfluid_level", FloatData.objects, "%")
     ac_enabled = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
 
@@ -56,10 +56,11 @@ def temperature(request):
     if request.method == "POST":
         try:
             activate_temperature(request)
+            context["warning"] = "Your car is being heated!"
         except ValueError as e:
             context["warning"] = e.args[0]
 
-    context["AC_temperature"] = getDataValue("temperature", FloatData.objects, "°C")
+    context["AC_temperature"] = "{t} °C".format(t=-2.0) or getDataValue("temperature", FloatData.objects, "°C")
     context["AC_enabled"] = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
 
     return render(request=request, template_name="userpage/temperature.html", context=context)
