@@ -67,9 +67,7 @@ def status(request):
 
         # Print the received data
         if settings.DEBUG:
-            pass
-        print(data_from_pi)
-    # TODO: Save these data so they can be accessed by the user later
+            print(data_from_pi)
     return create_response()
 
 
