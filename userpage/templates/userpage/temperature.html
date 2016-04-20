@@ -8,7 +8,7 @@
 
 {% block content %}
 
-    <script type="text/javascript" src="{% static 'userpage/temperature.js' %}"></script>
+
 
 
         <div class="box">
@@ -37,43 +37,59 @@
         {% csrf_token %}
 
         <div id="temperature-box">
-            <div class="center" style="padding-top: 30px; padding-bottom: 30px;">Choose target temperature</div>
-            <img class="center" src="{% static 'userpage/icons/up-arrow.svg' %}" onclick="upClick();" >
+            <div class="center" >Choose target temperature</div>
+            <div id="touchup">
+                <div id="up-button" style="background-image: url({% static 'userpage/icons/up-arrow.svg' %});" onclick="upClick()">
+                </div>
+            </div>
             <div class="center" id="circle"> </div>
-            <img class="center" src="{% static 'userpage/icons/down-arrow.svg' %}" onclick="downClick()">
+            <div id="touchdown">
+                <div id="down-button" style="background-image: url({% static 'userpage/icons/down-arrow.svg' %})" onclick="downClick()">
+                </div>
+            </div>
 
-            <div class="center" style="padding-top: 30px; padding-bottom: 30px;>
 
-                <label for="hours"> Ready at: </label>
 
-                <select class="dropdown" type="number" name="hours" id="hours">
-                    {% for hour in 24|get_range  %}
+            <div class="center" style="padding-top: 30px; padding-bottom: 30px;">
 
-                        {% if hour < 10 %}
-                            <option id="hour-{{ hour }}" value="0{{ hour }}"> 0{{ hour }} </option>
-                        {% else %}
-                            <option id="hour-{{ hour }}" value="{{ hour }}"> {{ hour }} </option>
-                        {% endif %}
+                <input type="checkbox" class="inliner" name="time" onclick="CheckboxClick(this)" checked>
 
-                    {%  endfor %}
-                </select>
+                <div id="now-wrapper" class="inliner wrapper verticaler">
+                    Ready now
+                </div>
 
-                <select class="dropdown" type="number" name="minutes" id="minutes">
-                    {% for minutes in 60|get_range %}
-                        {% if minutes < 10 %}
-                            <option id="minute-{{ minutes }}" value="0{{ minutes }}"> 0{{ minutes }} </option>
-                        {% else %}
-                            <option id="minute-{{ minutes }}" value="{{ minutes }}"> {{ minutes }} </option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
+                <div id="later-wrapper" class="inliner wrapper verticaler">
+                    Ready at
+
+                    <select class="dropdown verticaler" type="number" name="hours" id="hours">
+                        {% for hour in 24|get_range  %}
+
+                            {% if hour < 10 %}
+                                <option id="hour-{{ hour }}" value="0{{ hour }}"> 0{{ hour }} </option>
+                            {% else %}
+                                <option id="hour-{{ hour }}" value="{{ hour }}"> {{ hour }} </option>
+                            {% endif %}
+
+                        {%  endfor %}
+                    </select>
+
+                    <select class="dropdown verticaler" type="number" name="minutes" id="minutes">
+                        {% for minutes in 60|get_range %}
+                            {% if minutes < 10 %}
+                                <option id="minute-{{ minutes }}" value="0{{ minutes }}"> 0{{ minutes }} </option>
+                            {% else %}
+                                <option id="minute-{{ minutes }}" value="{{ minutes }}"> {{ minutes }} </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
             <input id="AC_enabled" type="hidden" name="AC_enabled" value="True">
             <input id="temp" type="hidden" name="temperature" value="">
 
             <div class="center">
-                <input type="submit" value="Activate" onclick="setValues();">
+                <input id="button" type="submit" value="Activate" onclick="setValues();">
             </div>
         </div>
 
@@ -85,15 +101,38 @@
         var now = new Date();
         var hours = now.getHours();
         var minutes = now.getMinutes() + 15;
+        var ac_enabled = "{{ AC_enabled }}";
+        var up = document.getElementById("touchup");
+        var down = document.getElementById("touchdown");
+        var timer;
+        var nowWrapper = document.getElementById("now-wrapper");
+        var laterWrapper = document.getElementById("later-wrapper");
+
+        laterWrapper.style.display = 'none';
+
+        up.addEventListener("touchstart", touchUpClick, false);
+        down.addEventListener("touchstart", touchDownClick, false);
+
 
         if(minutes > 60){
             hours = (hours + 1) % 24;
-            minutes = minutes % 60
+            minutes = minutes % 60;
         }
 
         document.getElementById("hour-" + hours).selected = true;
         document.getElementById("minute-" + minutes).selected = true;
         document.getElementById("circle").innerHTML = temp.toString();
+
+
+        function touchUpClick(event){
+            event.preventDefault()
+            upClick();
+        }
+
+        function touchDownClick(event){
+            event.preventDefault()
+            downClick()
+        }
 
         function upClick(){
             if(temp < 30){
@@ -111,6 +150,35 @@
 
         function setValues(){
             document.getElementById("temp").value = temp.toString();
+        }
+
+        function deactivate(){
+            document.getElementById("AC_enabled").value = "False";
+        }
+
+        function CheckboxClick(chkbox){
+            var later = document.getElementById("later-wrapper");
+            var now = document.getElementById("now-wrapper");
+
+            if (chkbox.checked == false){
+                later.style.display = 'inline-block';
+                now.style.display = 'none';
+                document.getElementById("time").value = "0";
+            } else{
+                later.style.display = 'none';
+                now.style.display = 'inline-block';
+                document.getElementById("time").value = "1";
+            }
+        }
+
+        function setup(){
+            if(ac_enabled == "Off"){
+                document.getElementById("button").value = "Activate";
+                document.getElementById("button").onclick = setValues();
+            } else if(ac_enabled == "On"){
+                document.getElementById("button").value = "Deactivate";
+                document.getElementById("button").onclick = deactivate();
+            }
         }
 
     </script>

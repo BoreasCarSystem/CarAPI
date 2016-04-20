@@ -45,7 +45,7 @@ def status(request):
         {"name": "Fuel Level", "value": fuel_level,"image":"userpage/icons/Gas Station-96.png"},
         {"name": "Washerfluid Level", "value": washerfluid_level, "image":"userpage/icons/Water-96.png"},
         {"name": "Oil Level", "value": "OK", "image": "userpage/icons/Oil Industry-96.png"},
-        {"name": "A/C status", "value": ac_enabled, "image":"userpage/icons/Fan-96.png"}
+        {"name": "A/C status", "value": ac_enabled, "image": "userpage/icons/Fan-96.png"}
     ]
     context = {"sensors": sensor_values, "warning": find_errors()}
     return render(request=request, template_name="userpage/status.html", context=context)
@@ -70,8 +70,6 @@ def temperature(request):
 def activate_temperature(request) :
     post = dict(request.POST)
 
-    print(post["temperature"])
-
     if "temperature" in post:
         try:
             temp = float((post["temperature"][0]).strip())
@@ -79,17 +77,29 @@ def activate_temperature(request) :
         except:
             raise ValueError("Temperature must be a number", "temperature")
 
-    if "hours" in post and "minutes" in post:
-        try:
-            time = post["hours"][0]  + ":" + post["minutes"][0]
-            tm.strptime(time, "%H:%M")	#Raiser valueError om regexen ikke matcher
-            create_time_message(time)
-        except ValueError:
-            raise ValueError("Time must be in the format \"HH:MM\"", "time")
+    if "time" not in post:
+        if "hours" in post and "minutes" in post:
+            try:
+                time = post["hours"][0] + ":" + post["minutes"][0]
+                tm.strptime(time, "%H:%M")	#Raiser valueError om regexen ikke matcher
+                create_time_message(time)
+            except ValueError:
+                raise ValueError("Time must be in the format \"HH:MM\"", "time")
         
     if "AC_enabled" in post:
         enabled = post["AC_enabled"][0]
         if enabled == "True":
+            create_AC_enabled_message(enabled)
+        else:
+            raise ValueError("AC_enabled is not boolean", "AC_enabled")
+
+
+def deactivate_temperature(request):
+    post = dict(request.POST)
+
+    if "AC_enabled" in post:
+        enabled = post["AC_enabled"][0]
+        if enabled == "False":
             create_AC_enabled_message(enabled)
         else:
             raise ValueError("AC_enabled is not boolean", "AC_enabled")
