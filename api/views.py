@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from .models import Message, FloatData, BooleanData, StringData
+from .models import Message, FloatData, BooleanData, StringData, ErrorMessage
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
@@ -73,4 +73,10 @@ def status(request):
 
 @csrf_exempt
 def error(request):
+    message = json.loads(request.body.decode('utf-8'))
+    try:
+        data = ErrorMessage.objects.get(pk=message['errno'])
+        data.message = message
+    except ObjectDoesNotExist:
+        ErrorMessage.objects.create(errno=message['errno'], message=message['message'])
     return create_response()

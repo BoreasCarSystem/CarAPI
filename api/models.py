@@ -7,6 +7,23 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 
 
+class ErrorMessage(models.Model):
+    CHOICES = (
+        (0, "Unknown error"),
+        (1, "Communication error with the PI"),
+        (2, "Some error occured on the PI"),
+        (3, "Failed to collect car data"),
+        (4, "An error occurred on the PI"),
+        (5, "An error occurred on the PI"),
+        (6, "The car battery is too low to start AC"),
+        (7, "The car battery is too low. AC has been turned off")
+    )
+    errno = models.IntegerField(primary_key=True, choices=CHOICES)
+    message = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.CHOICES[self.errno][1] + ": " + self.message
+
 
 class Message(models.Model):
     def convert_boolean(self, str):

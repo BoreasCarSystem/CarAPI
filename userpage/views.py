@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.template import loader
 
-from api.models import FloatData, BooleanData, StringData, Message
+from api.models import FloatData, BooleanData, StringData, Message, ErrorMessage
 from django.core.exceptions import ObjectDoesNotExist
 import time as tm
 
@@ -47,7 +47,7 @@ def status(request):
         {"name": "Oil Level", "value": "OK", "image": "userpage/icons/Oil Industry-96.png"},
         {"name": "A/C status", "value": ac_enabled, "image":"userpage/icons/Fan-96.png"}
     ]
-    context = {"sensors": sensor_values}
+    context = {"sensors": sensor_values, "warning": find_errors()}
     return render(request=request, template_name="userpage/status.html", context=context)
 
 
@@ -61,6 +61,8 @@ def temperature(request):
 
     context["AC_temperature"] = getDataValue("temperature", FloatData.objects, "°C")
     context["AC_enabled"] = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
+    if "warning" not in context:
+        context["warning"] = find_errors()
 
     return render(request=request, template_name="userpage/temperature.html", context=context)
 
@@ -112,3 +114,10 @@ def create_AC_enabled_message(enabled):
     message.type = "AC_enabled"
     message.value = enabled
     message.save()
+
+
+def find_errors():
+    errors = ErrorMessage.objects.all()
+    warning_message = "<br/>".join((str(error) for error in errors))
+    ErrorMessage.objects.all().delete()
+    return warning_message
