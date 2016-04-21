@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
+import json
 from django.template import loader
+from django.core import serializers
 
 from api.models import FloatData, BooleanData, StringData, Message
 from django.core.exceptions import ObjectDoesNotExist
@@ -90,6 +92,16 @@ def activate_temperature(request) :
             create_AC_enabled_message(enabled)
         else:
             raise ValueError("AC_enabled is not boolean", "AC_enabled")
+
+
+def temperature_data(request):
+    if request.method == "GET":
+        context = dict()
+        context["AC_temperature"] = getDataValue("temperature", FloatData.objects, "°C")
+        context["AC_enabled"] = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
+
+        return HttpResponse(json.dumps(context), content_type="application/json")
+    return HttpResponse(status=404)
 
 
 def deactivate_temperature(request):
