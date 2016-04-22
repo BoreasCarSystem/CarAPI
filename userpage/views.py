@@ -11,7 +11,7 @@ import time as tm
 # Create your views here.
 
 
-def getDataValue(pk, objects, suffix=None, replace_true_with=None, replace_false_with=None):
+def get_data_value(pk, objects, suffix=None, replace_true_with=None, replace_false_with=None):
     try:
         value = objects.get(pk=pk).value
         value_string = None
@@ -33,23 +33,28 @@ def getDataValue(pk, objects, suffix=None, replace_true_with=None, replace_false
         return "N/A"
 
 
-def status(request):
-
-    battery_level = getDataValue("battery_level", FloatData.objects, "%")
-    fuel_level = getDataValue("fuel_level", FloatData.objects, "%")
-    temperature = getDataValue("temperature", FloatData.objects, "°C")
-    washerfluid_level = getDataValue("washerfluid_level", FloatData.objects, "%")
-    ac_enabled = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
+def get_status_data():
+    battery_level = get_data_value("battery_level", FloatData.objects, "%")
+    fuel_level = get_data_value("fuel_level", FloatData.objects, "%")
+    temperature = get_data_value("temperature", FloatData.objects, "°C")
+    washerfluid_level = get_data_value("washerfluid_level", FloatData.objects, "%")
+    ac_enabled = get_data_value("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
 
     sensor_values = [
-        {"name": "Current temperature:", "value": temperature, "image": "userpage/icons/Temperature-96.png"},
-        {"name": "Battery Level:", "value": battery_level, "image":"userpage/icons/Charged Battery-96.png"},
+        {"name": "Current temperature", "value": temperature, "image": "userpage/icons/Temperature-96.png"},
+        {"name": "Battery Level", "value": battery_level, "image":"userpage/icons/Charged Battery-96.png"},
         {"name": "Fuel Level", "value": fuel_level,"image":"userpage/icons/Gas Station-96.png"},
         {"name": "Washerfluid Level", "value": washerfluid_level, "image":"userpage/icons/Water-96.png"},
         {"name": "Oil Level", "value": "OK", "image": "userpage/icons/Oil Industry-96.png"},
         {"name": "A/C status", "value": ac_enabled, "image": "userpage/icons/Fan-96.png"}
     ]
+
     context = {"sensors": sensor_values, "warning": "Insert warning here, or remove it to have no warning."}
+    return context
+
+
+def status(request):
+    context = get_status_data()
     return render(request=request, template_name="userpage/status.html", context=context)
 
 
@@ -61,13 +66,13 @@ def temperature(request):
         except ValueError as e:
             context["warning"] = e.args[0]
 
-    context["AC_temperature"] = getDataValue("temperature", FloatData.objects, "°C")
-    context["AC_enabled"] = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
+    context["AC_temperature"] = get_data_value("temperature", FloatData.objects, "°C")
+    context["AC_enabled"] = get_data_value("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
 
     return render(request=request, template_name="userpage/temperature.html", context=context)
 
 
-def activate_temperature(request) :
+def activate_temperature(request):
     post = dict(request.POST)
 
     if "temperature" in post:
@@ -81,7 +86,8 @@ def activate_temperature(request) :
         if "hours" in post and "minutes" in post:
             try:
                 time = post["hours"][0] + ":" + post["minutes"][0]
-                tm.strptime(time, "%H:%M")	#Raiser valueError om regexen ikke matcher
+                # Raiser valueError om regex ikke matcher
+                tm.strptime(time, "%H:%M")
                 create_time_message(time)
             except ValueError:
                 raise ValueError("Time must be in the format \"HH:MM\"", "time")
@@ -97,10 +103,17 @@ def activate_temperature(request) :
 def temperature_data(request):
     if request.method == "GET":
         context = dict()
-        context["AC_temperature"] = getDataValue("temperature", FloatData.objects, "°C")
-        context["AC_enabled"] = getDataValue("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
+        context["AC_temperature"] = get_data_value("temperature", FloatData.objects, "°C")
+        context["AC_enabled"] = get_data_value("AC_enabled", BooleanData.objects, replace_true_with="On", replace_false_with="Off")
 
         return HttpResponse(json.dumps(context), content_type="application/json")
+    return HttpResponse(status=404)
+
+
+def status_data(request):
+    if request.method == "GET":
+        context = get_status_data()
+        return HttpResponse(json.dumps(context), status=200, content_type="application/json")
     return HttpResponse(status=404)
 
 

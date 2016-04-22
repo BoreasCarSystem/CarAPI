@@ -99,13 +99,13 @@
 
     <script>
         var temp = 20;
-        var UPDATE_INTERVAL = 2000;
         var ac_enabled = "{{ AC_enabled }}";
         var up = document.getElementById("touchup");
         var down = document.getElementById("touchdown");
         var timer;
         var nowWrapper = document.getElementById("now-wrapper");
         var laterWrapper = document.getElementById("later-wrapper");
+        var UPDATE_INTERVAL = 4000;
         var PeriodicTemperatureUpdater = setInterval(getData, UPDATE_INTERVAL);
 
         laterWrapper.style.display = 'none';
