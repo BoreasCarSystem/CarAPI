@@ -25,6 +25,6 @@ urlpatterns = [
     url(r'^status/$', views.status),
     url(r'^error/$', views.error),
     url(r'^userpage/', include('userpage.urls')),
-    url(r'^$', RedirectView.as_view(url="/userpage/status")),
+    url(r'^$', RedirectView.as_view(pattern_name="temperature")),
 
 ]

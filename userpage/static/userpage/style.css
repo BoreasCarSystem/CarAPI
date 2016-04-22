@@ -91,7 +91,7 @@ nav a:visited
     text-decoration: none;
 }
 
-nav a.nav-status
+nav a:first-of-type
 {
     border-right: solid 1px black;
 }
