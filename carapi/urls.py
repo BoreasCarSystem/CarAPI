@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from api import views
+from django.views.generic import RedirectView
 
 
 
@@ -24,5 +25,6 @@ urlpatterns = [
     url(r'^status/$', views.status),
     url(r'^error/$', views.error),
     url(r'^userpage/', include('userpage.urls')),
+    url(r'^$', RedirectView.as_view(url="/userpage/status")),
 
 ]
