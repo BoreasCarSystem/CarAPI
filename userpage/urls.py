@@ -7,6 +7,6 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(pattern_name="temperature")),
     url(r'^status/$', views.status, name="status"),
     url(r'^temperature/$', views.temperature, name="temperature"),
-    url(r'^temperature/data/$', views.temperature_data, name="temperaturedata")
+    url(r'^temperature/data/$', views.temperature_data, name="temperaturedata"),
+    url(r'^status/data/$', views.status_data, name="statusdata")
 ]
-

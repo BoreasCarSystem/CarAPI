@@ -3,10 +3,6 @@
 
 {% block title %}Car status{% endblock %}
 
-{% block head %}
-<meta http-equiv="refresh" content="20" />
-{% endblock %}
-
 {% block id %}status{% endblock %}
 
 {% block content %}
@@ -22,9 +18,49 @@
             <div class="info">
                 {{ sensor.name }}
             </div>
-            <div class="value">
+            <div class="value" id="{{ sensor.name }}-value">
                 {{ sensor.value }}
             </div>
         </div>
     {% endfor %}
+
+
+    <script>
+
+    var UPDATE_INTERVAL = 3000;
+    var periodicStatusUpdater = setInterval(getData, UPDATE_INTERVAL);
+
+
+    function getData(){
+        var HTTPRequest = new XMLHttpRequest();
+        var method = "GET";
+        var url = "data";
+
+        HTTPRequest.onreadystatechange = function(){
+            if(HTTPRequest.readyState == 4 && HTTPRequest.status == 200){
+                    var data = JSON.parse(HTTPRequest.responseText);
+                    statusUpdater(data);
+                }
+        };
+
+        HTTPRequest.open(method, url, true);
+        HTTPRequest.send()
+    }
+
+
+    function statusUpdater(data){
+        var sensors = data["sensors"];
+        var length = sensors.length;
+
+        for(var i = 0; i < length; i++){
+
+            document.getElementById(sensors[i]["name"].toString() + "-value").innerHTML = sensors[i]["value"].toString();
+        }
+    }
+
+
+
+    </script>
+
+
 {% endblock %}
