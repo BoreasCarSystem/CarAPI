@@ -91,12 +91,12 @@
 
             <div class="center">
                 <div id="state1-buttons">
-                    <input id="activate-button" class="state1" type="submit" value="Activate" onclick="activate();">
+                    <input id="activate-button" class="state1" type="submit" value="Activate" onclick="activate()">
                 </div>
 
                 <div id="state2-buttons">
-                    <input id="change-button" class="state2" type="submit" value="Change temperature" onclick="activate();">
-                    <input id="deactivate-button" class="state2" type="submit" value="Deactivate" onclick="deactivate();">
+                    <input id="change-button" class="state2" type="submit" value="Change temperature" onclick="activate()">
+                    <input id="deactivate-button" class="state2" type="submit" value="Deactivate" onclick="deactivate()">
                 </div>
             </div>
 
@@ -221,7 +221,7 @@
 
         function state1(){
             document.getElementById("state2-buttons").style.display = 'none';
-            document.getElementById("state1-buttons").style.display = 'inline'
+            document.getElementById("state1-buttons").style.display = 'inline';
         }
 
         function state2(){
