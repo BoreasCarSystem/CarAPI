@@ -19,11 +19,8 @@ You can make the server delete messages when they are sent by setting `DELETE_FE
 Run `python manage.py runserver 34446` to run a server appropiate for development use.
 
 ## How to use
-1. With the server up and running, navigate to `http://localhost:34446/admin`.
-2. Log in with the user you created during setup step 8.
-3. Add some messages. 
-2. Confirm that those messages are sent by visiting `http://localhost:34446/status` or `http://localhost:34446/error`, either
-manually in your browser or by sending a HTTP request from the `CarCommunicator`.
+1. With the server and PI (see PI/readme) up and running, navigate to `http://localhost:34446/` to see a deployed version of this in action.
+2. To see what messages that can be stored, navigate to `http://localhost:34446/admin` and log in with the user and password you created.
 
 ## Protocol / message format
 See https://github.com/BoreasCarSystem/PI/blob/master/Protocols.md
