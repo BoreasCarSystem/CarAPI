@@ -62,7 +62,7 @@ def temperature(request):
     context = dict()
     if request.method == "POST":
         try:
-            activate_temperature(request)
+            activate_or_deactive(request)
         except ValueError as e:
             context["warning"] = e.args[0]
 
@@ -122,16 +122,8 @@ def status_data(request):
     return HttpResponse(status=404)
 
 
-def deactivate_temperature(request):
-    post = dict(request.POST)
-
-    if "AC_enabled" in post:
-        enabled = post["AC_enabled"][0]
-        if enabled == "False":
-            create_AC_enabled_message(enabled)
-        else:
-            raise ValueError("AC_enabled is not boolean", "AC_enabled")
-
+def deactivate_temperature(enabled):
+    create_AC_enabled_message(enabled)
 
 def create_temperature_message(temperature):
     message = Message()
@@ -159,3 +151,24 @@ def find_errors():
     warning_message = "<br/>".join((str(error) for error in errors))
     ErrorMessage.objects.all().delete()
     return warning_message
+
+def activate_or_deactive(request):
+    """
+    Decides whether request asks for activating or deactivating, and acts accordingly.
+    :param request: A HTTPRequest object from client side
+    :return boolean: True if activating, False if deactivating
+    """
+    post = dict(request.POST)
+
+    # NOTE: If client wants to change temperature, AC_enabled has to be true!
+    # Else nothing will happen.
+    if "AC_enabled" in post:
+        enabled = post["AC_enabled"][0]
+        if enabled.lower() == "false":
+            deactivate_temperature(enabled)
+            return False
+        elif enabled.lower() == "true":
+            activate_temperature(request)
+            return True
+        else:
+            raise ValueError

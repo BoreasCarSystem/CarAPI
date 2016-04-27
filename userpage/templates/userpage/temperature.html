@@ -90,8 +90,16 @@
             <input id="temp" type="hidden" name="temperature" value="">
 
             <div class="center">
-                <input id="button" type="submit" value="Activate" onclick="setValues();">
+                <div id="state1-buttons">
+                    <input id="activate-button" class="state1" type="submit" value="Activate" onclick="activate()">
+                </div>
+
+                <div id="state2-buttons">
+                    <input id="change-button" class="state2" type="submit" value="Change temperature" onclick="activate()">
+                    <input id="deactivate-button" class="state2" type="submit" value="Deactivate" onclick="deactivate()">
+                </div>
             </div>
+
         </div>
 
     </form>
@@ -105,7 +113,7 @@
         var timer;
         var nowWrapper = document.getElementById("now-wrapper");
         var laterWrapper = document.getElementById("later-wrapper");
-        var UPDATE_INTERVAL = 4000;
+        var UPDATE_INTERVAL = 5000;
         var PeriodicTemperatureUpdater = setInterval(getData, UPDATE_INTERVAL);
 
         laterWrapper.style.display = 'none';
@@ -114,6 +122,16 @@
         down.addEventListener("touchstart", touchDownClick, false);
         document.getElementById("circle").innerHTML = temp.toString();
 
+        setup();
+
+        function setup(){
+            if ( ac_enabled == "Off"){
+                state1();
+
+            } else if(ac_enabled == "On"){
+                state2();
+            }
+        }
 
         function touchUpClick(event){
             event.preventDefault();
@@ -139,7 +157,7 @@
             }
         }
 
-        function setValues(){
+        function activate(){
             document.getElementById("temp").value = temp.toString();
         }
 
@@ -173,16 +191,6 @@
             }
         }
 
-        function setup(){
-            if(ac_enabled == "Off"){
-                document.getElementById("button").value = "Activate";
-                document.getElementById("button").onclick = setValues();
-            } else if(ac_enabled == "On"){
-                document.getElementById("button").value = "Deactivate";
-                document.getElementById("button").onclick = deactivate();
-            }
-        }
-
         function getData(){
             var HTTPRequest = new XMLHttpRequest();
             var method = "GET";
@@ -200,9 +208,27 @@
         }
 
         function temperatureUpdater(data){
-            document.getElementById("AC_temp").innerHTML = data["AC_temperature"].toString();
-            document.getElementById("AC_stat").innerHTML = data["AC_enabled"].toString();
+            var AC_temperature = data["AC_temperature"].toString(), AC_enabled = data["AC_enabled"].toString();
+            document.getElementById("AC_temp").innerHTML = AC_temperature;
+            document.getElementById("AC_stat").innerHTML = AC_enabled;
+
+            if (AC_enabled == "On"){
+                state2();
+            } else if(AC_enabled == "Off"){
+                state1();
+            }
         }
+
+        function state1(){
+            document.getElementById("state2-buttons").style.display = 'none';
+            document.getElementById("state1-buttons").style.display = 'inline';
+        }
+
+        function state2(){
+            document.getElementById("state1-buttons").style.display = 'none';
+            document.getElementById("state2-buttons").style.display = 'inline';
+        }
+
 
     </script>
 
